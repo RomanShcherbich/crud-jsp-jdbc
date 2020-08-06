@@ -11,7 +11,7 @@ public interface GenericDAO<T> {
 
     public T get(Object id) throws SQLException;
 
-    public boolean delete(Object id);
+    public boolean delete(Object id) throws SQLException;
 
     public List<T> listAll();
 

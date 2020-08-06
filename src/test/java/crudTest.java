@@ -3,6 +3,7 @@ import model.User;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -19,7 +20,7 @@ public class crudTest {
     }
 
     @Test
-    public void T01_Create_Test() {
+    public void T01_Create_Test() throws SQLException {
         User actualUser = dao.create(expectedUser);
         expectedUser.setId(actualUser.getId());
         Assert.assertEquals("Created user doesn't equal", expectedUser.toString(), actualUser.toString());
@@ -39,7 +40,7 @@ public class crudTest {
     }
 
     @Test
-    public void T04_Delete_Test() {
+    public void T04_Delete_Test() throws SQLException {
         Assert.assertTrue("Deleting error", dao.delete(expectedUser.getId()));
         Assert.assertNull("Deleting error", dao.get(expectedUser.getId()));
     }

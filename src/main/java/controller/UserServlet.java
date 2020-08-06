@@ -42,7 +42,7 @@ public class UserServlet extends HttpServlet {
                     listUser(request, response);
                     break;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new ServletException(e);
         }
     }

@@ -10,10 +10,16 @@ import java.util.*;
 public class UserDAO extends JdbcDAO<User> implements GenericDAO<User> {
 
     protected static final String USER_TABLE = "`crud_jsp_jdbc_demo`.`users`";
-
     protected static final String INSERT_STATEMENT = "INSERT INTO `crud_jsp_jdbc_demo`.`users`\n" +
                                                      "(`name`,\n" +
                                                      "`email`,\n" +
+                                                     "`country`)\n" +
+                                                     "VALUES\n" +
+                                                     "(?,\n" +
+                                                     "?,\n" +
+                                                     "?);\n";
+    protected static final String INSERT_ERROR_STATEMENT = "INSERT INTO `crud_jsp_jdbc_demo`.`users`\n" +
+                                                     "(`name`,\n" +
                                                      "`country`)\n" +
                                                      "VALUES\n" +
                                                      "(?,\n" +
@@ -33,11 +39,12 @@ public class UserDAO extends JdbcDAO<User> implements GenericDAO<User> {
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user) throws SQLException {
         User createdUser = null;
         try (
                 Connection connection = getConnection();
                 PreparedStatement ps = connection.prepareStatement(INSERT_STATEMENT);
+//                PreparedStatement ps = connection.prepareStatement(INSERT_ERROR_STATEMENT);
         ) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -46,9 +53,6 @@ public class UserDAO extends JdbcDAO<User> implements GenericDAO<User> {
             if(ps.executeUpdate() > 0) {
                 createdUser = get(connection, getMaxId(connection));
             }
-        } catch (SQLException e) {
-            log.error(String.format("Can't create user [%s]", user));
-            printSQLException(e);
         }
         return createdUser;
     }
@@ -112,7 +116,7 @@ public class UserDAO extends JdbcDAO<User> implements GenericDAO<User> {
     }
 
     @Override
-    public boolean delete(Object id) {
+    public boolean delete(Object id) throws SQLException {
         boolean rowDeleted = false;
         int userId = toInt(id);
         try (
@@ -122,9 +126,6 @@ public class UserDAO extends JdbcDAO<User> implements GenericDAO<User> {
             log.info(ps);
             ps.setInt(1, userId);
             rowDeleted = ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            log.error(String.format("Can't delete user by id [%s]", userId));
-            printSQLException(e);
         }
         return rowDeleted;
     }
