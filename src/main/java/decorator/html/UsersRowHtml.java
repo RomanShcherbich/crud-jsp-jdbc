@@ -1,4 +1,4 @@
-package decorator.model;
+package decorator.html;
 
 import lombok.*;
 

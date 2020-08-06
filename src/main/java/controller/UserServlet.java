@@ -1,6 +1,7 @@
 package controller;
 
 import dao.UserDAO;
+import decorator.*;
 import model.User;
 
 import javax.servlet.*;
@@ -8,6 +9,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserServlet extends HttpServlet {
 
@@ -55,6 +57,7 @@ public class UserServlet extends HttpServlet {
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+        request.setAttribute("form", UserFormDecorator.newUserForm());
         dispatcher.forward(request, response);
     }
 
@@ -73,7 +76,7 @@ public class UserServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         User existingUser = userDAO.get(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
-        request.setAttribute("user", existingUser);
+        request.setAttribute("form", UserFormDecorator.editUserForm(existingUser));
         dispatcher.forward(request, response);
     }
 
@@ -97,8 +100,17 @@ public class UserServlet extends HttpServlet {
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<User> listUser = userDAO.listAll();
+        List<User> listUser = userDAO.listAll().stream()
+                .sorted((user1, user2) -> user1.getId() > user2.getId() ? 1 : -1)
+                .collect(Collectors.toList());
         request.setAttribute("listUser", listUser);
+        StringBuilder usersHtml = new StringBuilder();
+        for (User user :
+                listUser) {
+            usersHtml.append("\n");
+            usersHtml.append(UserListDecorator.toHtml(user));
+        }
+        request.setAttribute("userRowsHtml", usersHtml.toString());
         RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
         dispatcher.forward(request, response);
     }

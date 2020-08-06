@@ -1,4 +1,4 @@
-package decorator;
+package utils;
 
 import javax.xml.bind.*;
 import java.io.StringWriter;

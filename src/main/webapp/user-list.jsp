@@ -8,6 +8,9 @@
     <meta charset="utf-8">
     <title>User Management App</title>
 </head>
+<header>
+    <button onclick="window.location.href='list';">User Management App</button>
+</header>
 <body>
 <table border="1">
     <caption>Users list</caption>
@@ -15,18 +18,12 @@
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Country</th>
         <th>Actions</th>
     </tr>
-    <tr>
-        <td>dsf</td>
-        <td>eerev</td>
-        <td>ffff</td>
-        <td>
-            <p style="text-align: center">
-                <button onclick="window.location.href = 'edit?id=6';">Edit</button>
-                <button onclick="window.location.href = 'delete';">Delete</button>
-        </td>
-    </tr>
+    <%=request.getAttribute("userRowsHtml")%>
 </table>
+<br>
+<button onclick="window.location.href='new';">Add new user</button>
 </body>
 </html>

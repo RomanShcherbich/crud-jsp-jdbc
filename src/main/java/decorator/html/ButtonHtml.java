@@ -1,9 +1,8 @@
-package decorator.model;
+package decorator.html;
 
 import lombok.*;
 
 import javax.xml.bind.annotation.*;
-import java.util.List;
 
 @Data
 @Builder
@@ -12,12 +11,15 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ButtonHtml {
 
+    public final static String BUTTON_ON_CLICK_ACTION = "window.location.href='%s';";
+
     @XmlValue
     private String button;
-    @Builder.Default
-    @XmlAttribute
-    private String onclick = "window.location.href='%s';";
 
-    //onclick="window.location.href = 'edit?id=6';"
+    @XmlAttribute
+    private String onclick;
+
+    @XmlAttribute
+    private String type;
 
 }
